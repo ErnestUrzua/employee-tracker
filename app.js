@@ -26,14 +26,32 @@ connection.connect(function (err) {
 
 //prompt user for information
 function start() {
-var inquirer = inquirer.prompt({
-    name: "choices",
-    type: "rawlist",
-    message: "What would you like to do??",
-    choices: ["add employee", "add department", "add role"]
-}).then(answer => {
-
-});
+    inquirer = inquirer.prompt({
+        name: "choices",
+        type: "list",
+        message: "What would you like to do??",
+        choices: ["add employee", "add department", "add role","Exit"]
+    }).then(function (userChoice) {
+        // depending on the user selection, 
+        switch (userChoice.menuChoice) {
+            // call on a function to show the quotes
+            case "Add employee":
+                addEmployee();
+                break;
+            // call on a function to add a new quote
+            case "Add department":
+                addDepartment();
+                break;
+            // call on a function to add a new quote
+            case "Add role":
+                addRole();
+                break;
+            // exit the application by not calling on any functions
+            case "Exit":
+                console.log("\n Goodbye!");
+                break;
+        }
+    })
 }
 
 start();
@@ -54,6 +72,14 @@ function addEmployee() {
     console.log(query.sql);
 }
 
+function addDepartment() {
+
+    start();//go back to menu
+}
+
+function addRole() {
+    start();//go back to menu
+}
 //view departments, roles,employess
 
 //update employee roles
