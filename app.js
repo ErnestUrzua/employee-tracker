@@ -33,7 +33,7 @@ function start() {
         name: "menu",
         type: "list",
         message: "What would you like to do??",
-        choices: ["add employee", "add department", "add role", "exit"]
+        choices: ["add employee", "add department", "add role", "view employee", "view department", "view role", "update employee", "update role", "exit"]
     }).then(function (answer) {
         switch (answer.menu) {
             //CREATE
@@ -46,6 +46,7 @@ function start() {
             case "add role":
                 addRole();
                 break;
+
             //Read
             case "view employee":
                 viewEmployee();
@@ -56,15 +57,15 @@ function start() {
             case "view role":
                 viewRole();
                 break;
+                
             //Update
             case "update employee":
                 updateEmployee();
                 break;
-            case "update role":
-                viewRole();
-                break;
+           
             //DELETE BONUS
 
+            //EXIT
             case "exit":
                 //exit the prompt
                 break;
@@ -72,8 +73,6 @@ function start() {
         }
     })
 }
-
-
 
 //add departments, roles and employees
 //query the db to add an employee
@@ -121,37 +120,83 @@ function addEmployee() {
 }
 
 function addRole() {
-    console.log("adding Employee\n");
-    connection.query("INSERT INTO employee (first_name) VALUES (?)", [req.body.first_name], function (err, results) {
-        if (err) throw err;
-    });
+    
+    inquirer.prompt([{
+        name: "title",
+        type: "input",
+        message: "title:"
+    },
+    {
+        name: "salary",
+        type: "input",
+        message: "salary:"
+    },
+    {
+        name: "departmentID",
+        type: "input",
+        message: "department id:"
+    }
+    ]).then(function (answer) {
+        //console.log(answer);
 
-    connection.query("INSERT INTO employee (last_name) VALUES (?)", [req.body.last_name], function (err, results) {
-        if (err) throw err;
-    });
+        var query = "INSERT INTO role SET ?";
+        connection.query(query, {
+            title: answer.title,
+            salary: answer.salary,
+            department_id: answer.departmentID
+        }, function (err) {
+            if (err) throw err;
+        });
 
-    // logs the actual query being run
-    console.log(query.sql);
-    start();
+        console.log("adding role\n");
+        start();
+    });
 }
 
 function addDepartment() {
-    console.log("adding Employee\n");
-    connection.query("INSERT INTO employee (first_name) VALUES (?)", [req.body.first_name], function (err, results) {
-        if (err) throw err;
-    });
+    inquirer.prompt([{
+        name: "name",
+        type: "input",
+        message: "name:"
+    }
+    ]).then(function (answer) {
+        //console.log(answer);
 
-    connection.query("INSERT INTO employee (last_name) VALUES (?)", [req.body.last_name], function (err, results) {
-        if (err) throw err;
-    });
+        var query = "INSERT INTO department SET ?";
+        connection.query(query, {
+            name: answer.name
+        }, function (err) {
+            if (err) throw err;
+        });
 
-    // logs the actual query being run
-    console.log(query.sql);
-    start();
+        console.log("adding department\n");
+        start();
+    });
 }
 
+function viewEmployee(){
+
+}
+
+function viewDepartment(){
+
+}
+
+function viewRole(){
+
+}
+
+function updateEmployee(){
+
+}
+
+function 
+
 start();
+
+
 //view departments, roles,employess
+
 
 //update employee roles
 
