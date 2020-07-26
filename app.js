@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require('cli-table');
 
 // add connection to mysql server
 var connection = mysql.createConnection({
@@ -57,12 +58,12 @@ function start() {
             case "view role":
                 viewRole();
                 break;
-                
+
             //Update
             case "update employee":
                 updateEmployee();
                 break;
-           
+
             //DELETE BONUS
 
             //EXIT
@@ -120,7 +121,7 @@ function addEmployee() {
 }
 
 function addRole() {
-    
+
     inquirer.prompt([{
         name: "title",
         type: "input",
@@ -174,23 +175,42 @@ function addDepartment() {
     });
 }
 
-function viewEmployee(){
+function viewEmployee() {
+
+    connection.query("SELECT * FROM employee", function (err, res) {
+
+        var table = new Table({
+            //You can name these table heads chicken if you'd like. They are simply the headers for a table we're putting our data in
+            head: ["id", "name", "last name", "role id", "manager id"],
+            //These are just the width of the columns. Only mess with these if you want to change the cosmetics of our response
+            colWidths: [10, 15, 15, 15, 15]
+        });
+
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].id, res[i].first_name, res[i].last_name, res[i].role_id, res[i].manager_id],);
+        }
+        // logs the actual query being run
+        console.log(table.toString());
+        console.log("view Employees\n");
+        //console.log(table);
+        //console.table(table);
+        start();
+    })
 
 }
 
-function viewDepartment(){
+function viewDepartment() {
 
 }
 
-function viewRole(){
+function viewRole() {
 
 }
 
-function updateEmployee(){
+function updateEmployee() {
 
 }
 
-function 
 
 start();
 
