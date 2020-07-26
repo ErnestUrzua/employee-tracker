@@ -20,19 +20,22 @@ var connection = mysql.createConnection({
 //connect to server
 connection.connect(function (err) {
     if (err) throw err;
-    console.log("connected as id " + connection.threadId + "\n");
+    console.log("\n connected as id " + connection.threadId + "\n");
 
 });
+
+
+
 
 //prompt user for information
 function start() {
     inquirer.prompt({
-        name: "choices",
+        name: "menu",
         type: "list",
         message: "What would you like to do??",
         choices: ["add employee", "add department", "add role", "exit"]
     }).then(function (answer) {
-        switch (answer.choices) {
+        switch (answer.menu) {
             //CREATE
             case "add employee":
                 addEmployee();
@@ -70,7 +73,7 @@ function start() {
     })
 }
 
-start();
+
 
 //add departments, roles and employees
 //query the db to add an employee
@@ -78,43 +81,43 @@ function addEmployee() {
 
     inquirer.prompt([{
         name: "firstName",
-        type: "list",
+        type: "input",
         message: "first name:"
     },
     {
         name: "lastName",
-        type: "list",
-        message: " last name:"
+        type: "input",
+        message: "last name:"
     },
     {
         name: "roleID",
-        type: "list",
+        type: "input",
         message: "role id:"
     },
     {
-        name: "managersID",
-        type: "list",
+        name: "managerID",
+        type: "input",
         message: "managers id:"
     },
+    ]).then(function (answer) {
+        //console.log(answer);
 
-    ]);
-    console.log("adding Employee\n");
-    connection.query("INSERT INTO employee (first_name) VALUES (?)", [req.body.first_name], function (err, results) {
-        if (err) throw err;
-    });
-    connection.query("INSERT INTO employee (last_name) VALUES (?)", [req.body.last_name], function (err, results) {
-        if (err) throw err;
-    });
-    connection.query("INSERT INTO employee (roleID) VALUES (?)", [req.body.role_id], function (err, results) {
-        if (err) throw err;
-    });
-    connection.query("INSERT INTO employee (managersID) VALUES (?)", [req.body.manager_id], function (err, results) {
-        if (err) throw err;
+        var query = "INSERT INTO employee SET ?";
+        connection.query(query, {
+            first_name: answer.firstName,
+            last_name: answer.lastName,
+            role_id: answer.roleID,
+            manager_id: answer.managerID
+        }, function (err) {
+            if (err) throw err;
+        });
+
+
+        // logs the actual query being run
+        console.log("added Employee\n");
+        start();
     });
 
-    // logs the actual query being run
-    console.log(query.sql);
-    start();
 }
 
 function addRole() {
@@ -147,7 +150,7 @@ function addDepartment() {
     start();
 }
 
-
+start();
 //view departments, roles,employess
 
 //update employee roles
