@@ -200,11 +200,47 @@ function viewEmployee() {
 }
 
 function viewDepartment() {
+    connection.query("SELECT * FROM department", function (err, res) {
 
+        var table = new Table({
+            //You can name these table heads chicken if you'd like. They are simply the headers for a table we're putting our data in
+            head: ["id", "name"],
+            //These are just the width of the columns. Only mess with these if you want to change the cosmetics of our response
+            colWidths: [10, 15]
+        });
+
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].id, res[i].name],);
+        }
+        // logs the actual query being run
+        console.log(table.toString());
+        console.log("view departments\n");
+        //console.log(table);
+        //console.table(table);
+        start();
+    })
 }
 
 function viewRole() {
+    connection.query("SELECT * FROM role", function (err, res) {
 
+        var table = new Table({
+            //You can name these table heads chicken if you'd like. They are simply the headers for a table we're putting our data in
+            head: ["id", "title", "salary", "department id"],
+            //These are just the width of the columns. Only mess with these if you want to change the cosmetics of our response
+            colWidths: [10, 15, 15, 15]
+        });
+
+        for (var i = 0; i < res.length; i++) {
+            table.push([res[i].id, res[i].title, res[i].salary, res[i].department_id],);
+        }
+        // logs the actual query being run
+        console.log(table.toString());
+        console.log("view roles\n");
+        //console.log(table);
+        //console.table(table);
+        start();
+    })
 }
 
 function updateEmployee() {
