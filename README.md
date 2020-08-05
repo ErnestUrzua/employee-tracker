@@ -19,3 +19,4 @@
 https://github.com/ErnestUrzua/employee-tracker
 
 ## Demo
+![employee tracker demo](/Assets/employee-tracker.gif)
