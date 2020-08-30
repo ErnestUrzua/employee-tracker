@@ -34,7 +34,7 @@ function start() {
         name: "menu",
         type: "list",
         message: "What would you like to do??",
-        choices: ["add employee", "add department", "add role", "view employee", "view department", "view role", "update employee", "update role", "exit"]
+        choices: ["add employee", "add department", "add role", "view employee", "view department", "view role", "update employee", "exit"]
     }).then(function (answer) {
         switch (answer.menu) {
             //CREATE
@@ -61,7 +61,7 @@ function start() {
 
             //Update
             case "update employee":
-                updateEmployee();
+                updateEmployeeRole();
                 break;
 
             //DELETE BONUS
@@ -111,7 +111,6 @@ function addEmployee() {
         }, function (err) {
             if (err) throw err;
         });
-
 
         // logs the actual query being run
         console.log("added Employee\n");
@@ -204,7 +203,7 @@ function viewDepartment() {
 
         var table = new Table({
             //You can name these table heads chicken if you'd like. They are simply the headers for a table we're putting our data in
-            head: ["id", "name"],
+            head: ["id", "department"],
             //These are just the width of the columns. Only mess with these if you want to change the cosmetics of our response
             colWidths: [10, 15]
         });
@@ -243,17 +242,56 @@ function viewRole() {
     })
 }
 
-function updateEmployee() {
+function updateEmployeeRole() {
 
+    connection.query("SELECT * FROM employee", function (err, res) {
+
+        //get all employees to display as choices
+        var employees = res.map(employee => {
+            var employeeChoices = employee.first_name + " " + employee.last_name;
+            var employeeID = employee.id;
+            return (employeeChoices,employeeID);
+        });
+
+
+        inquirer.prompt([
+            {
+                type: "list",
+                name: "employee",
+                message: "choose an employee to update role",
+                choices: employees
+            },
+            {
+                name: "updatedRole",
+                type: "input",
+                message: "enter a new role."
+            }
+        ]).then(function (answer) {
+            connection.query("UPDATE employee SET ? WHERE ?;", 
+            [
+                {role_id:answer.updatedRole},
+                {id:answer.employee}
+                
+            ],
+            
+            function (err,res) {
+                if(err) throw err;
+                console.log("employee role updated");
+                start();
+            }
+            )}
+
+            )
+
+    })
 }
-
 
 start();
 
-
+//done
 //view departments, roles,employess
 
-
+//todo
 //update employee roles
 
 /*bonus
